@@ -34,7 +34,7 @@ const contentWrapperBaseStyle: SerializedStyles = css({
   display: 'inline-block',
   willChange: 'transform',
   fontSize: '120px',
-  height: '120px', // 텍스트 높이와 일치시켜야 함
+  height: '130px',
   WebkitTextStroke: '1px #6558EF',
   fontWeight: 'bold',
 });

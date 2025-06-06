@@ -6,8 +6,8 @@ import InfiniteWordMarquee from "./components/infinite-word-marquee";
 import BlinkingArrows from "./components/blinking-arrow";
 
 export default function Home() {
-  const firstSentence = "AI SCIENTIST BACK_END FRONT_END DATA ANALYST ";
-  const secondSentence = "DESIGNER DEVOPS DEVELOPER DEVREL PROJECT MANAGER";
+  const firstSentence = "BACK_END AI SCIENTIST BACK_END FRONT_END DATA ANALYST AI SCIENTIST";
+  const secondSentence = "DEVREL PROJECT MANAGER  DEVELOPER PROJECT MANAGER DEVREL DESIGNER DEVOPS";
   const thirdSentence = "GNONUE GNONEU NGONEU NOGUNE NOGUEN NOGNEU NOGEUN GNOEUN";
   const firstTarget = "FRONT_END";
   const secondTarget = "DEVELOPER";
@@ -105,19 +105,19 @@ export default function Home() {
           <MarqueeCenterStop
             fullText={firstSentence}
             targetText={firstTarget}
-            duration={2}
+            duration={1.5}
             direction="left"
           />
           <MarqueeCenterStop
             fullText={secondSentence}
             targetText={secondTarget}
-            duration={2}
+            duration={1.5}
             direction="right"
           />
           <MarqueeCenterStop
             fullText={thirdSentence}
             targetText={thirdTarget}
-            duration={2}
+            duration={1.5}
             direction="left"
           />
           <InfiniteWordMarquee

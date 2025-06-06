@@ -120,7 +120,7 @@ const MarqueeCenterStop: React.FC<Props> = ({
     display: 'inline-block',
     willChange: 'transform',
     fontSize: '120px', // 모든 텍스트 크기 120px
-    height: '120px', // 텍스트 높이와 일치시켜야 함
+    height: '130px',
   });
 
   // 5-3. outline 문자 스타일 (prefix, suffix에 적용)
