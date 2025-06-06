@@ -1,6 +1,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* localFont에서 지정한 CSS 변수 이름과 정확히 일치해야 합니다 */
+  --font-pretendard: PretendardVariable, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -10,16 +12,19 @@
   }
 }
 
+/* html, body에 PretendardVariable을 기본 폰트로 선언 */
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: var(--font-pretendard);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* 아래 줄을 **반드시 삭제**하거나 주석 처리하세요!
+     font-family: Arial, Helvetica, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
