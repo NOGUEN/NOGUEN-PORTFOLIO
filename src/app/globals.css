@@ -12,6 +12,8 @@
   }
 }
 
+
+
 /* html, body에 PretendardVariable을 기본 폰트로 선언 */
 html,
 body {
@@ -44,4 +46,9 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
