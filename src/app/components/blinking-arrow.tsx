@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-"use client";
+'use client';
 
-import React from "react";
-import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
+import React from 'react';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 /**
  * 세 개의 화살표가 아래로 향하며 순차적으로 깜빡이는 컴포넌트
@@ -50,7 +50,7 @@ const ArrowWrapper = styled.div<{ delay: string }>`
 // 3) SVG 자체 스타일 (크기나 색상 등을 한 번에 조정 가능)
 const ChevronIcon: React.FC<{ size?: number; color?: string }> = ({
   size = 40,
-  color = "#7c83fd",
+  color = '#7c83fd',
 }) => (
   <svg
     width={size}
@@ -81,8 +81,7 @@ const Container = styled.div`
  * BlinkingArrows 컴포넌트
  * - 한 번에 세 개의 화살표가 세로로 쌓여 있고, 순서대로 깜빡임
  */
-const BlinkingArrows: React.FC = () => {
-  return (
+const BlinkingArrows: React.FC = () => (
     <Container>
       {/* delay: 0s, 0.3s, 0.6s 순서로 깜빡이도록 설정 */}
       <ArrowWrapper delay="0s">
@@ -96,6 +95,5 @@ const BlinkingArrows: React.FC = () => {
       </ArrowWrapper>
     </Container>
   );
-};
 
 export default BlinkingArrows;

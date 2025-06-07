@@ -40,7 +40,7 @@ const contentWrapperBaseStyle: SerializedStyles = css({
 });
 
 /** 좌/우 무한 스크롤 애니메이션 생성 함수 */
-const generateAnimation = (direction: 'left' | 'right') => keyframes`
+const generateAnimation = (direction: 'left' | 'right'): ReturnType<typeof keyframes> => keyframes`
   from { transform: translateX(${direction === 'left' ? '0' : '-100%'}); }
   to   { transform: translateX(${direction === 'left' ? '-100%' : '0'}); }
 `;
@@ -78,7 +78,7 @@ const InfiniteWordMarquee: React.FC<InfiniteWordMarqueeProps> = ({
 
     // 반복 횟수 계산 (화면 너비 × 2 이상)
     let repeatCount = Math.ceil((viewportWidth * 2) / textWidth);
-    if (repeatCount > 100) repeatCount = 100;
+    if (repeatCount > 100) {repeatCount = 100;}
 
     // 반복 문자열 생성
     let repeated = '';
@@ -93,8 +93,8 @@ const InfiniteWordMarquee: React.FC<InfiniteWordMarqueeProps> = ({
     setDuration(durationSec);
 
     // 창 크기 변경 시 재계산 (즉시 실행)
-    const handleResize = () => {
-      if (!text.trim()) return;
+    const handleResize = () : void => {
+      if (!text.trim()) {return;}
       setRepeatString('');
       setTimeout(() => {
         setRepeatString(repeated);

@@ -78,7 +78,7 @@ const MarqueeCenterStop: React.FC<Props> = ({
     if (idx === -1) {
       // targetText가 없으면 전체 문자열을 글자 단위로 outline 처리
       return fullText.split('').map((char, i) => (
-        <span key={'noT' + i} css={outlineCharStyle}>
+        <span key={`noT${i}`} css={outlineCharStyle}>
           {char}
         </span>
       ));
@@ -90,7 +90,7 @@ const MarqueeCenterStop: React.FC<Props> = ({
     return (
       <>
         {prefixText.split('').map((char, i) => (
-          <span key={'p' + i} css={outlineCharStyle}>
+          <span key={`p${i}`} css={outlineCharStyle}>
             {char}
           </span>
         ))}
@@ -98,7 +98,7 @@ const MarqueeCenterStop: React.FC<Props> = ({
           {targetText}
         </span>
         {suffixText.split('').map((char, i) => (
-          <span key={'s' + i} css={outlineCharStyle}>
+          <span key={`s${i}`} css={outlineCharStyle}>
             {char}
           </span>
         ))}
@@ -153,8 +153,8 @@ const MarqueeCenterStop: React.FC<Props> = ({
         ref={contentRef}
         css={contentWrapperBaseStyle}
         style={contentStyle}
-        onTransitionEnd={(e) => {
-          if (e.propertyName === 'transform') {
+        onTransitionEnd={(event) => {
+          if (event.propertyName === 'transform') {
             setFadeIn(true);
           }
         }}
