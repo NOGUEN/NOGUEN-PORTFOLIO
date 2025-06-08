@@ -1,28 +1,19 @@
-/** @jsxImportSource @emotion/react */
 'use client';
 
 import React from 'react';
-import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 /**
  * 세 개의 화살표가 아래로 향하며 순차적으로 깜빡이는 컴포넌트
- *
- * 이전에 gap을 음수로 주셨는데, gap에 음수를 사용하면 의도치 않은 레이아웃 문제가 생길 수 있습니다.
- * 대신 “gap: 0”으로 설정하고, 각 ArrowWrapper에 margin-top을 음수로 주어 화살표가 더욱 겹치도록 조정하겠습니다.
+ * gap 대신 margin-top으로 겹침 조정
  */
 
 // 1) 화살표 깜빡임 애니메이션: opacity 0 → 1 → 0
 const blink = keyframes`
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 `;
 
 // 2) 공통 화살표 스타일 (SVG을 감싸는 컨테이너)
@@ -30,18 +21,10 @@ const ArrowWrapper = styled.div<{ delay: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* 깜빡임 애니메이션: blink 1.2초 무한 반복, delay만큼 시작 지연 */
+  opacity: 0;
   animation: ${blink} 1.2s infinite;
   animation-delay: ${({ delay }) => delay};
-
-  /* 기본적으로 보이지 않다가 애니메이션이 시작될 때 opacity:1로 변화 */
-  opacity: 0;
-
-  /* 두 번째, 세 번째 화살표를 위로 조금 겹치도록 margin-top을 음수로 설정 */
-  &:nth-of-type(2) {
-    margin-top: -20px;
-  }
+  &:nth-of-type(2),
   &:nth-of-type(3) {
     margin-top: -20px;
   }
@@ -69,12 +52,13 @@ const ChevronIcon: React.FC<{ size?: number; color?: string }> = ({
   </svg>
 );
 
-// 4) 세 개의 ArrowWrapper를 묶는 컨테이너 (gap을 0으로 하고, 개별 margin-top으로 겹침 조정)
+// 4) 세 개의 ArrowWrapper를 묶는 컨테이너
 const Container = styled.div`
   display: flex;
+  padding-top: 20px;
   flex-direction: column;
   align-items: center;
-  gap: 0; /* 기본 간격은 0으로 설정 */
+  gap: 0;
 `;
 
 /**
@@ -82,18 +66,17 @@ const Container = styled.div`
  * - 한 번에 세 개의 화살표가 세로로 쌓여 있고, 순서대로 깜빡임
  */
 const BlinkingArrows: React.FC = () => (
-    <Container>
-      {/* delay: 0s, 0.3s, 0.6s 순서로 깜빡이도록 설정 */}
-      <ArrowWrapper delay="0s">
-        <ChevronIcon size={40} />
-      </ArrowWrapper>
-      <ArrowWrapper delay="0.3s">
-        <ChevronIcon size={40} />
-      </ArrowWrapper>
-      <ArrowWrapper delay="0.6s">
-        <ChevronIcon size={40} />
-      </ArrowWrapper>
-    </Container>
-  );
+  <Container>
+    <ArrowWrapper delay="0s">
+      <ChevronIcon />
+    </ArrowWrapper>
+    <ArrowWrapper delay="0.3s">
+      <ChevronIcon />
+    </ArrowWrapper>
+    <ArrowWrapper delay="0.6s">
+      <ChevronIcon />
+    </ArrowWrapper>
+  </Container>
+);
 
 export default BlinkingArrows;

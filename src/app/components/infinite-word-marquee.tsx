@@ -1,8 +1,6 @@
-/** @jsxImportSource @emotion/react */
-// components/InfiniteWordMarquee.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { css, keyframes, SerializedStyles } from '@emotion/react';
 import styled from '@emotion/styled';
+import { css, keyframes } from '@emotion/react';
 
 interface InfiniteWordMarqueeProps {
   text: string;
@@ -10,6 +8,9 @@ interface InfiniteWordMarqueeProps {
   speed?: number;
 }
 
+// ───────────────────────────────────────────────────────
+// Styled Components
+// ───────────────────────────────────────────────────────
 const MarqueeContainer = styled.div`
   width: 100%;
   overflow: hidden;
@@ -23,35 +24,37 @@ const MarqueeFlex = styled.div`
   flex-wrap: nowrap;
 `;
 
-/** 
- * 모든 반복 텍스트에 공통으로 적용할 Emotion 스타일 
- * - display: inline-block
- * - will-change: transform
- * - font-size: 120px
- */
-const contentWrapperBaseStyle: SerializedStyles = css({
-  color: 'transparent',
-  display: 'inline-block',
-  willChange: 'transform',
-  fontSize: '120px',
-  height: '130px',
-  WebkitTextStroke: '1px #6558EF',
-  fontWeight: 'bold',
-});
-
-/** 좌/우 무한 스크롤 애니메이션 생성 함수 */
 const generateAnimation = (direction: 'left' | 'right'): ReturnType<typeof keyframes> => keyframes`
   from { transform: translateX(${direction === 'left' ? '0' : '-100%'}); }
   to   { transform: translateX(${direction === 'left' ? '-100%' : '0'}); }
 `;
 
+const AnimatedSpan = styled.span<{
+  duration: number;
+  animation: ReturnType<typeof generateAnimation>;
+}>`
+  display: inline-block;
+  will-change: transform;
+  font-size: 120px;
+  height: 130px;
+  color: transparent;
+  -webkit-text-stroke: 1px #6558ef;
+  font-weight: bold;
+  animation: ${({ animation, duration }) => css`
+    ${animation} ${duration}s linear infinite
+  `};
+`;
+
+// ───────────────────────────────────────────────────────
+// Component
+// ───────────────────────────────────────────────────────
 const InfiniteWordMarquee: React.FC<InfiniteWordMarqueeProps> = ({
   text,
   direction = 'left',
   speed = 25,
 }) => {
-  const [repeatString, setRepeatString] = useState<string>('');
-  const [duration, setDuration] = useState<number>(0);
+  const [repeatString, setRepeatString] = useState('');
+  const [duration, setDuration] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,78 +66,52 @@ const InfiniteWordMarquee: React.FC<InfiniteWordMarqueeProps> = ({
 
     // 공백을 노브레이킹 스페이스로 변환
     const safeText = text.replace(/ /g, '\u00A0');
-
     // 임시 span을 만들어 실제 텍스트 너비 측정
-    const tempSpan = document.createElement('span');
-    tempSpan.style.visibility = 'hidden';
-    tempSpan.style.whiteSpace = 'nowrap';
-    tempSpan.textContent = safeText;
-    document.body.appendChild(tempSpan);
-    const textWidth = tempSpan.offsetWidth;
-    document.body.removeChild(tempSpan);
+    const temp = document.createElement('span');
+    temp.style.visibility = 'hidden';
+    temp.style.whiteSpace = 'nowrap';
+    temp.textContent = safeText;
+    document.body.appendChild(temp);
+    const textWidth = temp.offsetWidth;
+    document.body.removeChild(temp);
 
-    // 화면 너비
     const viewportWidth = window.innerWidth;
-
-    // 반복 횟수 계산 (화면 너비 × 2 이상)
-    let repeatCount = Math.ceil((viewportWidth * 2) / textWidth);
-    if (repeatCount > 100) {repeatCount = 100;}
-
-    // 반복 문자열 생성
-    let repeated = '';
-    for (let i = 0; i < repeatCount; i++) {
-      repeated += safeText;
-    }
+    let count = Math.ceil((viewportWidth * 2) / textWidth);
+    count = Math.min(count, 100);
+    const repeated = Array(count).fill(safeText).join('');
     setRepeatString(repeated);
 
-    // 전체 이동 거리 = 텍스트 너비 × 반복 횟수
-    const totalWidth = textWidth * repeatCount;
-    const durationSec = totalWidth / speed;
-    setDuration(durationSec);
+    const totalWidth = textWidth * count;
+    setDuration(totalWidth / speed);
 
-    // 창 크기 변경 시 재계산 (즉시 실행)
-    const handleResize = () : void => {
-      if (!text.trim()) {return;}
+    const handleResize = (): void => {
+      const newCount = Math.ceil((window.innerWidth * 2) / textWidth);
+      const safeCount = Math.min(newCount, 100);
+      const newRepeated = Array(safeCount).fill(safeText).join('');
       setRepeatString('');
-      setTimeout(() => {
-        setRepeatString(repeated);
-      }, 0);
+      setTimeout(() => setRepeatString(newRepeated), 0);
     };
 
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, [text, speed]);
 
   const animationKeyframe = generateAnimation(direction);
 
+  if (!repeatString) {
+    return null;
+  }
+
   return (
     <MarqueeContainer ref={containerRef}>
-      {repeatString && (
-        <MarqueeFlex>
-          <span
-            css={[
-              contentWrapperBaseStyle,
-              css`
-                animation: ${animationKeyframe} ${duration}s linear infinite;
-              `,
-            ]}
-          >
-            {repeatString}
-          </span>
-          <span
-            css={[
-              contentWrapperBaseStyle,
-              css`
-                animation: ${animationKeyframe} ${duration}s linear infinite;
-              `,
-            ]}
-          >
-            {repeatString}
-          </span>
-        </MarqueeFlex>
-      )}
+      <MarqueeFlex>
+        <AnimatedSpan animation={animationKeyframe} duration={duration}>
+          {repeatString}
+        </AnimatedSpan>
+        <AnimatedSpan animation={animationKeyframe} duration={duration}>
+          {repeatString}
+        </AnimatedSpan>
+      </MarqueeFlex>
     </MarqueeContainer>
   );
 };
